@@ -55,7 +55,8 @@ model_name: "<your_model_name>"
 The application expects the following inputs from the user:
 
 1. **User Question**: A detailed question or problem statement related to data analysis.
-2. **Domain Selection**: The domain or category of data the user is interested in analyzing.
+   OR
+3. **KPI Selection**: Users can use a predefined KPI list provided within the application.
 
 ## Example Input
 ```markdown
