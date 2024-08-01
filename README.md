@@ -42,3 +42,41 @@ To run the application, you'll need to set up environment variables and configur
 - Azure OpenAI API Credentials: Store in st.secrets for secure access.
 - Database URI: The URI for the SQLite database (e.g., sqlite:///sales_dataset.db).
 
+## Secrets or .env file sample
+```sh
+openai_api_key: "<your_openai_api_key>"
+azure_endpoint: "<your_azure_endpoint>"
+deployment_name: "<your_deployment_name>"
+model_name: "<your_model_name>"
+```
+
+## Input Data
+
+The application expects the following inputs from the user:
+
+1. **User Question**: A detailed question or problem statement related to data analysis.
+2. **Domain Selection**: The domain or category of data the user is interested in analyzing.
+
+## Example Input
+```markdown
+**User Question:** 
+How can we optimize sales performance in the retail sector using historical sales data?
+```
+
+## Expected Output
+```
+**SQL Query:**
+SELECT * FROM sales WHERE ...
+
+**Data Analysis Report:**
+- KPI 1: ...
+- KPI 2: ...
+...
+
+**Output Data:**
+| Column 1 | Column 2 | ... |
+|----------|----------|-----|
+| Data 1   | Data 2   | ... |
+...
+
+```
