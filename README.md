@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ## Environment Configurations
 To run the application, you'll need to set up environment variables and configuration files. Key configurations include:
 
-- Azure OpenAI API Credentials: Store in st.secrets for secure access.
+- Azure OpenAI API Credentials: Store in st.secrets or .env for secure access.
 - Database URI: The URI for the SQLite database (e.g., sqlite:///sales_dataset.db).
 
 ## Secrets or .env file sample
