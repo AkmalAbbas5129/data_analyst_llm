@@ -36,13 +36,12 @@ def main(db_uri, db, DDL, llm):
         # Example questions to guide the user
         st.write("### Example Questions")
         st.write("""
-        - **"What is the total revenue for Q1 2024?"**
+        - **"What is the total revenue for Q1?"**
         - **"Which store locations have a population greater than 500,000?"**
-        - **"How many units of product ID 202 were sold in the last month?"**
-        - **"Show me the average discount applied to orders in 2023."**
-        - **"Which sales team handled the most orders in the 'Northwest' region?"**
+        - **"Which stores are in California and what are their types?"**
+        - **"Which stores are located in New York City?"**
+        - **"How much revenue was generated from orders placed in 2018"**
         - **"What is the median household income in California?"**
-        - **"List all customers who placed orders in the last 6 months."**
         """)
 
         st.sidebar.selectbox("Select Column", options=[], disabled=True)
