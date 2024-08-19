@@ -24,7 +24,7 @@ def xyz(column_data):
     return f"Processed data: {column_data}"
 
 # Main app function
-def main(db_uri,db,DDL,llm):
+def main(db_uri, db, DDL, llm):
     st.sidebar.title("Analysis Navigation")
     option = st.sidebar.selectbox("Select Option", ["Predefined KPIs", "Data Analysis Chat Bot"])
 
@@ -32,37 +32,47 @@ def main(db_uri,db,DDL,llm):
 
         st.title("Chat with Data Analysis Expert")
         st.sidebar.write("Chat bot is selected")
+
+        # Example questions to guide the user
+        st.write("### Example Questions")
+        st.write("""
+        - **"What is the total revenue for Q1 2024?"**
+        - **"Which store locations have a population greater than 500,000?"**
+        - **"How many units of product ID 202 were sold in the last month?"**
+        - **"Show me the average discount applied to orders in 2023."**
+        - **"Which sales team handled the most orders in the 'Northwest' region?"**
+        - **"What is the median household income in California?"**
+        - **"List all customers who placed orders in the last 6 months."**
+        """)
+
         st.sidebar.selectbox("Select Column", options=[], disabled=True)
-        
+
         if "messages" not in st.session_state:
             st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
         for msg in st.session_state.messages:
             st.chat_message(msg["role"]).write(msg["content"])
 
-        if prompt := st.chat_input(placeholder="What is this data about?"):
+        if prompt := st.chat_input(placeholder="Ask a question about the data..."):
             st.session_state.messages.append({"role": "user", "content": prompt})
             st.chat_message("user").write(prompt)
 
-            
             with st.chat_message("assistant"):
                 
-                #Fetching the latest question asked by user
-                question = (st.session_state.messages[len(st.session_state.messages) - 1]["content"])
+                # Fetching the latest question asked by user
+                question = st.session_state.messages[-1]["content"]
 
-
-                #Generating KPIs from DDL
+                # Generating KPIs from DDL
                 kpi_list = generate_kpi(question, DDL, llm)
-                #st.write(DDL)
 
-                #Fetching aggregated KPIs
+                # Fetching aggregated KPIs
                 response, df_results, individual_kpi_list = generate_results(question, kpi_list, db_uri, DDL, llm)
 
                 if response == "Please try again and provide proper analysis metric":
                     st.write(response)
 
                 else:
-                    #Generating final report
+                    # Generating final report
                     report = generate_report(question, response, llm)
 
                     if "database is missing" in report.lower():
@@ -72,7 +82,6 @@ def main(db_uri,db,DDL,llm):
                         st.write(report)
                         st.session_state.messages.append({"role": "assistant", "content": report})
 
-    
     elif option == "Predefined KPIs":
         st.sidebar.write("Predefined KPIs is selected")
         
@@ -83,19 +92,19 @@ def main(db_uri,db,DDL,llm):
         columns = kpi_df.columns.tolist()
         selected_domain = st.sidebar.selectbox("Select Column", columns)
         
-        # Collected listed kpis for the selected domain and removing any null values
+        # Collected listed KPIs for the selected domain and removing any null values
         kpis_list = kpi_df[selected_domain].dropna().tolist()  # Drop NaN values first
 
         kpis_list = [kpi for kpi in kpis_list if kpi != '']
         
-        #Fetching aggregated KPIs
+        # Fetching aggregated KPIs
         response, df_results = generate_results_predefind_kpis(selected_domain, kpis_list, db_uri, DDL, llm)
 
         if response == "Please try again and provide proper analysis metric in KPI list":
             st.write(response)
 
         else:
-            #Generating final report
+            # Generating final report
             report = generate_report(selected_domain, response, llm)
 
             if "database is missing" in report.lower():
@@ -103,8 +112,6 @@ def main(db_uri,db,DDL,llm):
                 
             else:
                 st.write(report)
-
-
 
 # Run the main function
 if __name__ == "__main__":
@@ -117,8 +124,7 @@ if __name__ == "__main__":
     with col2:  
         st.image(logo_url, width=200)
     
-
-    #Importing database
+    # Importing database
     db_uri = "sqlite:///sales_dataset.db"
     db = SQLDatabase.from_uri(db_uri)
     
@@ -136,4 +142,4 @@ if __name__ == "__main__":
 
     DDL = get_tables_ddl(db_uri)  
 
-    main(db_uri,db,DDL, llm)
+    main(db_uri, db, DDL, llm)
